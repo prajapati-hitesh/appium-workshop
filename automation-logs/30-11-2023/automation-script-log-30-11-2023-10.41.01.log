@@ -1,0 +1,2 @@
+2023-11-30 22:41:01 [main] [INFO ] [L:40] [AppiumServer.java:buildAppiumServerProcess()] - Appium Server Log File Can be found here: D:\The Test Tribe\Appium Workshop\appium-workshop\appium-server-logs\30-11-2023\appium-server-logs-30-11-2023_22.41.01.log
+2023-11-30 22:41:10 [main] [INFO ] [L:44] [VodQATests.java:setupAppiumServer()] - Appium Server Started At : http://127.0.0.1:39087/
