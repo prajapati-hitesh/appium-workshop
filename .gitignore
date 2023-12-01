@@ -30,9 +30,13 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
+/appium-server-logs/
+/automation-logs/
 
 ### VS Code ###
 .vscode/
 
 ### Mac OS ###
 .DS_Store
+
+*.log
