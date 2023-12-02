@@ -1,23 +1,24 @@
 package com.tribe.workshop.appium.tests.dec2023;
 
-import com.tribe.workshop.appium.helpers.SystemHelper;
-import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.testng.annotations.*;
+import com.tribe.workshop.appium.pages.CalculatorPage;
+
 
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Duration;
 
-public class VodQATests {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class CalculatorTests {
+
     private static final Logger logger = LogManager.getLogger(VodQATests.class);
     AppiumDriverLocalService appiumService;
     AndroidDriver driver;
@@ -48,8 +49,8 @@ public class VodQATests {
                 .setDeviceName("Mi A1")
                 .setPlatformName("Android")
                 .setPlatformVersion("13")
-                .setAppPackage("com.vodqareactnative")
-                .setAppActivity("com.vodqareactnative.MainActivity")
+                .setAppPackage("com.google.android.calculator")
+                .setAppActivity("com.android.calculator2.Calculator")
                 //.setApp(SystemHelper.getUserDirectory().concat("/apps/VodQA.apk"))
                 .setAutomationName("UiAutomator2");
 
@@ -60,17 +61,16 @@ public class VodQATests {
     @AfterTest
     public void closeAppUnderTest() throws InterruptedException {
         Thread.sleep(5000);
-        driver.terminateApp("com.vodqareactnative");
+        driver.terminateApp("com.google.android.calculator");
         driver.quit();
     }
 
     @Test
-    public void vodQALoginTest() {
-        logger.info("Is App Installed : " + driver.isAppInstalled("com.vodqareactnative"));
-        driver.findElement(AppiumBy.accessibilityId("username")).clear();
-        driver.findElement(AppiumBy.accessibilityId("username")).sendKeys("admin");
-        driver.findElement(AppiumBy.accessibilityId("password")).clear();
-        driver.findElement(AppiumBy.accessibilityId("password")).sendKeys("admin");
-        driver.findElement(AppiumBy.androidUIAutomator("new UiSelector().text(\"LOG IN\")")).click();
+    public void sumTest() {
+        CalculatorPage cPage = new CalculatorPage(driver);
+
+        String result = cPage.add(10, 10);
+        System.out.println("Result Is : " + result);
+        assertThat(result).isEqualTo("20");
     }
 }
