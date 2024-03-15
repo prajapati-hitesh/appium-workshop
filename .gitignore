@@ -32,7 +32,7 @@ build/
 !**/src/test/**/build/
 /appium-server-logs/
 /automation-logs/
-/.idea/
+/.idea/*
 
 ### VS Code ###
 .vscode/
