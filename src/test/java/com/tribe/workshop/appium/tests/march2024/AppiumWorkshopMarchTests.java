@@ -40,8 +40,8 @@ public class AppiumWorkshopMarchTests {
                 .usingAnyFreePort()
                 .withIPAddress("127.0.0.1")
                 .withTimeout(Duration.ofMinutes(5))
-                .withArgument(GeneralServerFlag.USE_PLUGINS, "gestures")
-                .withArgument(GeneralServerFlag.USE_PLUGINS, "element-wait");
+                .withArgument(GeneralServerFlag.USE_PLUGINS, "gestures,element-wait");
+//                .withArgument(GeneralServerFlag.USE_PLUGINS, "element-wait");
 
         // Build a service with argument
         appiumService = AppiumDriverLocalService.buildService(appiumServerArguments);
@@ -74,25 +74,26 @@ public class AppiumWorkshopMarchTests {
         driver = new AndroidDriver(appiumService.getUrl(), options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
+        loginToVodQAApp();
 
     }
 
     public void loginToVodQAApp() {
         // get username element
-        WebElement usernameElement = findElement(AppiumBy.accessibilityId("username"));
+        WebElement usernameElement = driver.findElement(AppiumBy.accessibilityId("username"));
         // clear text
         usernameElement.clear();
         // enter text
         usernameElement.sendKeys("admin");
         // get password element
-        WebElement passwordElement = findElement(AppiumBy.accessibilityId("password"));
+        WebElement passwordElement = driver.findElement(AppiumBy.accessibilityId("password"));
         // clear text
         passwordElement.clear();
         // enter text
         passwordElement.sendKeys("admin");
 
         // click on login button
-        findElement(AppiumBy.androidUIAutomator("new UiSelector().text(\"LOG IN\")")).click();
+        driver.findElement(AppiumBy.androidUIAutomator("new UiSelector().text(\"LOG IN\")")).click();
     }
 
     @Test
@@ -124,7 +125,7 @@ public class AppiumWorkshopMarchTests {
     @Test
     public void dragAndDropUsingPluginTest() {
         // navigate to drag and drop screen
-        findElement(AppiumBy.androidUIAutomator("new UiSelector().text(\"Drag & Drop\")")).click();
+        driver.findElement(AppiumBy.androidUIAutomator("new UiSelector().text(\"Drag & Drop\")")).click();
         RemoteWebElement source = (RemoteWebElement) wait.until(elementToBeClickable(AppiumBy.accessibilityId("dragMe")));
         RemoteWebElement destination = (RemoteWebElement) wait.until(elementToBeClickable(AppiumBy.accessibilityId("dropzone")));
 
