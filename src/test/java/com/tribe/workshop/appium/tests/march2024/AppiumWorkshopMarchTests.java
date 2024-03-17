@@ -1,5 +1,6 @@
 package com.tribe.workshop.appium.tests.march2024;
 
+import com.tribe.workshop.appium.helpers.SystemHelper;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
@@ -12,8 +13,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.Duration;
 
@@ -22,11 +21,18 @@ public class AppiumWorkshopMarchTests {
     private WebDriverWait wait;
     @BeforeClass
     public void initializeDriver() throws MalformedURLException {
+//        UiAutomator2Options options = new UiAutomator2Options()
+//                .setPlatformName("Android")
+//                .setPlatformVersion("13")
+//                .setAppPackage("com.vodqareactnative")
+//                .setAppActivity("com.vodqareactnative.MainActivity")
+//                .setAutomationName("UiAutomator2")
+//                .setDeviceName("Mi A1");
+
         UiAutomator2Options options = new UiAutomator2Options()
                 .setPlatformName("Android")
                 .setPlatformVersion("13")
-                .setAppPackage("com.vodqareactnative")
-                .setAppActivity("com.vodqareactnative.MainActivity")
+                .setApp(SystemHelper.getUserDirectory().concat("/apps/VodQA.apk"))
                 .setAutomationName("UiAutomator2")
                 .setDeviceName("Mi A1");
 
@@ -35,8 +41,7 @@ public class AppiumWorkshopMarchTests {
     }
 
     @Test
-    public void myFirstTest() {
-
+    public void loginTest() {
         // get username element
         WebElement usernameElement = findElement(AppiumBy.accessibilityId("username"));
         // clear text
