@@ -4,13 +4,13 @@ import com.tribe.workshop.appium.helpers.SystemHelper;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
+import io.appium.java_client.service.local.AppiumDriverLocalService;
+import io.appium.java_client.service.local.AppiumServiceBuilder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -19,6 +19,28 @@ import java.time.Duration;
 public class AppiumWorkshopMarchTests {
     private AndroidDriver driver;
     private WebDriverWait wait;
+
+    AppiumDriverLocalService appiumService;
+
+    @BeforeSuite
+    public void startAppiumServer() {
+        // Build server arguments
+        AppiumServiceBuilder appiumServerArguments = new AppiumServiceBuilder()
+                .usingAnyFreePort()
+                .withIPAddress("127.0.0.1")
+                .withTimeout(Duration.ofMinutes(5));
+
+        // Build a service with argument
+        appiumService = AppiumDriverLocalService.buildService(appiumServerArguments);
+
+        // start server
+        appiumService.start();
+    }
+
+    @AfterSuite
+    public void stopServer() {
+        appiumService.stop();
+    }
     @BeforeClass
     public void initializeDriver() throws MalformedURLException {
 //        UiAutomator2Options options = new UiAutomator2Options()
@@ -36,7 +58,7 @@ public class AppiumWorkshopMarchTests {
                 .setAutomationName("UiAutomator2")
                 .setDeviceName("Mi A1");
 
-        driver = new AndroidDriver(new URL("http://127.0.0.1:4723/"), options);
+        driver = new AndroidDriver(appiumService.getUrl(), options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(30));
     }
 
