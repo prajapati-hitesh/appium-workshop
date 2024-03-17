@@ -6,12 +6,15 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
+import io.appium.java_client.service.local.flags.GeneralServerFlag;
+import io.appium.java_client.service.local.flags.ServerArgument;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
+import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.*;
@@ -20,6 +23,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.Collections;
+import java.util.Map;
+
+import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
 
 public class AppiumWorkshopMarchTests {
     private AndroidDriver driver;
@@ -33,7 +39,9 @@ public class AppiumWorkshopMarchTests {
         AppiumServiceBuilder appiumServerArguments = new AppiumServiceBuilder()
                 .usingAnyFreePort()
                 .withIPAddress("127.0.0.1")
-                .withTimeout(Duration.ofMinutes(5));
+                .withTimeout(Duration.ofMinutes(5))
+                .withArgument(GeneralServerFlag.USE_PLUGINS, "gestures")
+                .withArgument(GeneralServerFlag.USE_PLUGINS, "element-wait");
 
         // Build a service with argument
         appiumService = AppiumDriverLocalService.buildService(appiumServerArguments);
@@ -66,25 +74,10 @@ public class AppiumWorkshopMarchTests {
         driver = new AndroidDriver(appiumService.getUrl(), options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
-        // get username element
-        WebElement usernameElement = findElement(AppiumBy.accessibilityId("username"));
-        // clear text
-        usernameElement.clear();
-        // enter text
-        usernameElement.sendKeys("admin");
-        // get password element
-        WebElement passwordElement = findElement(AppiumBy.accessibilityId("password"));
-        // clear text
-        passwordElement.clear();
-        // enter text
-        passwordElement.sendKeys("admin");
 
-        // click on login button
-        findElement(AppiumBy.androidUIAutomator("new UiSelector().text(\"LOG IN\")")).click();
     }
 
-    @Test
-    public void loginTest() {
+    public void loginToVodQAApp() {
         // get username element
         WebElement usernameElement = findElement(AppiumBy.accessibilityId("username"));
         // clear text
@@ -100,7 +93,6 @@ public class AppiumWorkshopMarchTests {
 
         // click on login button
         findElement(AppiumBy.androidUIAutomator("new UiSelector().text(\"LOG IN\")")).click();
-
     }
 
     @Test
@@ -127,6 +119,16 @@ public class AppiumWorkshopMarchTests {
     public Point getCenterOfElement(Point elementLocation, Dimension elementSize) {
         return new Point(elementLocation.getX() + (elementSize.getWidth() / 2),
                 elementLocation.getY() + (elementSize.getHeight() / 2));
+    }
+
+    @Test
+    public void dragAndDropUsingPluginTest() {
+        // navigate to drag and drop screen
+        findElement(AppiumBy.androidUIAutomator("new UiSelector().text(\"Drag & Drop\")")).click();
+        RemoteWebElement source = (RemoteWebElement) wait.until(elementToBeClickable(AppiumBy.accessibilityId("dragMe")));
+        RemoteWebElement destination = (RemoteWebElement) wait.until(elementToBeClickable(AppiumBy.accessibilityId("dropzone")));
+
+        driver.executeScript("gesture: dragAndDrop", Map.of("sourceId", source.getId(), "destinationId", destination.getId()));
     }
 
     private WebElement findElement(By by) {
