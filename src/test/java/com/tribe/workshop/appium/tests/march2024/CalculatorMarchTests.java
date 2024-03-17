@@ -66,22 +66,53 @@ public class CalculatorMarchTests {
         char[] aAsArray = String.valueOf(a).toCharArray(); // [1, 0]
         char[] bAsArray = String.valueOf(b).toCharArray(); // [2, 0]
 
-        for(char each : aAsArray) {
-            findElement(AppiumBy.accessibilityId(String.valueOf(each))).click();
-        }
+        // Entering first A
+        enterDigitsOnCalculator(aAsArray);
 
         // perform plus
         findElement(AppiumBy.accessibilityId("plus")).click();
-        for(char each : bAsArray) {
-            findElement(AppiumBy.accessibilityId(String.valueOf(each))).click();
-        }
+
+        // entering second a
+        enterDigitsOnCalculator(bAsArray);
 
         // click equals
         findElement(AppiumBy.accessibilityId("equals")).click();
 
+        // print the result
+        System.out.println("Final Result : " + getResult());
+
+        // multiplication
+        // subtraction
+        // division
+    }
+
+    @Test
+    public void multiplicationTest() {
+        int a = 15;
+        int b = 19;
+
+        // enter first A
+        enterDigitsOnCalculator(String.valueOf(a).toCharArray());
+
+        // click on multiply
+        findElement(AppiumBy.accessibilityId("multiply")).click();;
+
+        // enter second b
+        enterDigitsOnCalculator(String.valueOf(b).toCharArray());
+
+        // print the result
+        System.out.println("Multiplication of [" + a + "] & [" + b + "] Is : " + getResult());
+    }
+
+    public void enterDigitsOnCalculator(char [] digitsToSelect) {
+        for(char each : digitsToSelect) {
+            findElement(AppiumBy.accessibilityId(String.valueOf(each))).click();
+        }
+    }
+
+    public String getResult() {
         // get the value of result
-        WebElement resultElement = findElement(AppiumBy.id("com.google.android.calculator:id/result_final"));
-        System.out.println("Final Result : " + resultElement.getText());
+        return findElement(AppiumBy.id("com.google.android.calculator:id/result_final")).getText();
     }
     @AfterClass
     public void cleanUp() throws InterruptedException {
