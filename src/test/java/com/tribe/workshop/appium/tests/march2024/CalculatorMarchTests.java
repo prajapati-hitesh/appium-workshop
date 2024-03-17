@@ -100,6 +100,8 @@ public class CalculatorMarchTests {
         // enter second b
         enterDigitsOnCalculator(String.valueOf(b).toCharArray());
 
+        // click equals
+        findElement(AppiumBy.accessibilityId("equals")).click();
         // print the result
         System.out.println("Multiplication of [" + a + "] & [" + b + "] Is : " + getResult());
     }
